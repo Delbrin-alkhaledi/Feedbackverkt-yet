@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Feedbackverktøyet</title>
+  <style>
+    body{
+      background-color: rgb(254, 169, 169);
+    }
+    input{
+    width: 40%;
+    height: 30px;
+    outline: none;
+    border: none;
+    background: #95d5ff;
+    margin: 4px;
+    border-radius: 8px;
+    padding: 4px;
+    color: #3c00ff;
+  }
+    button{
+    width: 15%;
+    height: 30px;
+    border: none;
+    cursor: pointer;
+    background: #f10f0f;
+    color: #fff;
+    border-radius: 8px;
+  }
+  </style>
+</head>
+<body>
+  <h1>Feedbackverktøyet</h1>
+  <input type="text" id="bokstav" placeholder="Skrive her et tall eller bokstaver">
+  <button id="send">Send</button>
+  <p id="ordet">_ _ _ _ _ _ _ _ _</p>
+  <p>Gjettinger igjen: <span id="feilgjettinger">6 👀</span></p>
+  <p>Dine svar:: <span id="bokstaver"></span></p>
+
+  <script>
+    const ord = ["Feed", "Feedback", "Feedbackverkt", "Feedbackverktøyet"][Math.floor(Math.random() * 4)];
+    let bokstaverGjettet = [];
+    let feilgjettinger = 0;
+    const skjultOrd = Array(ord.length).fill("_");
+    
+    const ordetEl = document.getElementById("ordet");
+    const feilgjettingerEl = document.getElementById("feilgjettinger");
+    const bokstaverEl = document.getElementById("bokstaver");
+    const bokstavEl = document.getElementById("bokstav");
+    const sendEl = document.getElementById("send");
+    
+    ordetEl.textContent = skjultOrd.join(" ");
+    
+    sendEl.addEventListener("click", function() {
+      const bokstav = bokstavEl.value.toLowerCase();
+      bokstavEl.value = "";
+      
+      if (bokstaverGjettet.includes(bokstav)) {
+        alert("Du har allerede gjettet på den bokstaven.");
+      } else if (ord.includes(bokstav)) {
+        for (let i = 0; i < ord.length; i++) {
+          if (ord[i] === bokstav) {
+            skjultOrd[i] = bokstav;
+          }
+        }
+        bokstaverGjettet.push(bokstav);
+        ordetEl.textContent = skjultOrd.join(" ");
+      } else {
+        feilgjettinger++;
+        feilgjettingerEl.textContent = 6 - feilgjettinger;
+        bokstaverGjettet.push(bokstav);
+        bokstaverEl.textContent = bokstaverGjettet.join(", ");
+        
+        if (feilgjettinger >= 6) {
+          alert("Beklager, du tapte. Ordet var " + ord);
+        }
+      }
+      
+      if (!skjultOrd.includes("_")) {
+        alert("Gratulerer, du vant! Ordet var " + ord);
+      }
+    });
+  </script>
